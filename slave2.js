@@ -23,5 +23,5 @@ var xml = require('fs').readFileSync('mediateur_slave2.wsdl', 'utf8'),
         response.end("404: Not Found: " + request.url);
     });
 
-server.listen(PORT_ECOUTE);
+server.listen(PORT_ECOUTE, "0.0.0.0");
 service = soap.listen(server, '/mediateurslave', myService, xml);

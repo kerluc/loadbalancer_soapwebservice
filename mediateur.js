@@ -68,7 +68,7 @@ var xml = require('fs').readFileSync('mediateur_maitre.wsdl', 'utf8'),
         response.end("404: Not Found: " + request.url);
     });
 
-server.listen(PORT_ECOUTE);
+server.listen(PORT_ECOUTE, "0.0.0.0");
 service = soap.listen(server, '/mediateurmaitre', myService, xml);
 
 // Implémentation de WSSecurity pour nodejs - username/password : root/root
