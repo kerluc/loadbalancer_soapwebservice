@@ -6,13 +6,12 @@ var fs = require('fs'),
 var PORT_ECOUTE = 8000;
 
 // Définition des esclaves
-var slaves = 
-{
-  0 : { 'url' :'http://localhost:8002/mediateurslave' ,
-      'count' : 0 },
-  1 : { 'url' :'http://localhost:8001/mediateurslave' ,
-      'count' : 0 }
-}
+var slaves = [
+  { 'url' :'http://localhost:8002/mediateurslave' ,
+    'count' : 0 },
+  { 'url' :'http://localhost:8001/mediateurslave' ,
+    'count' : 0 }
+]
 
 // Définition du service 
 var myService = {
@@ -23,7 +22,7 @@ var myService = {
 				          min = slaves[0]['count'];
                   index = 0;
 
-                  for(i = 1; i < Object.keys(slaves).length; ++i)
+                  for(i = 1; i < slaves.length; ++i)
                   {
                     if (slaves[i]['count'] < min)
                     {
