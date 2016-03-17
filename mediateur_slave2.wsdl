@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://localhost:8002/mediateurslave" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" targetNamespace="http://localhost:8002/mediateurslave">
+<types>
+<s:schema elementFormDefault="qualified" targetNamespace="http://localhost:8002/mediateurslave">
+<s:element name="getAnswer">
+<s:complexType>
+<:sequence/>
+</s:complexType>
+</s:element>
+<s:element name="getAnswerResponse">
+<s:complexType>
+<s:sequence>
+<s:element minOccurs="1" maxOccurs="1" name="getAnswer" type="s:string" />
+</s:sequence>
+</s:complexType>
+</s:element>
+</s:schema></types><message name="getAnswerSoapIn">
+<part name="parameters" element="tns:getAnswer" />
+</message>
+<message name="getAnswerSoapOut">
+<part name="parameters" element="tns:getAnswerResponse" />
+</message>
+<portType name="mediateurslaveSoap">
+<operation name="getAnswer">
+<input message="tns:getAnswerSoapIn" />
+<output message="tns:getAnswerSoapOut" />
+</operation>
+</portType>
+<binding name="mediateurslaveSoap" type="tns:mediateurslaveSoap">
+<soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+<operation name="getAnswer">
+<soap:operation soapAction="http://localhost:8002/mediateurslave/getAnswer" style="document" />
+<input>
+<soap:body use="literal" />
+</input>
+<output>
+<soap:body use="literal" />
+</output>
+</operation>
+</binding>
+<service name="mediateurslave">
+<port name="mediateurslaveSoap" binding="tns:mediateurslaveSoap">
+<soap:address location="http://localhost:8002/mediateurslave" />
+</port>
+</service>
+</definitions>
