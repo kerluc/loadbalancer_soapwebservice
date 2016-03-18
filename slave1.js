@@ -10,8 +10,7 @@ var myService = {
       mediateurslave: {
           mediateurslaveSoap: {
               getAnswer: function(args) {
-                
-                return {result : "ok"};
+                return {result : "YES"};
               }
           }
       }

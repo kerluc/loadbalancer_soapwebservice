@@ -17,10 +17,10 @@ var slaves = [
 var myService = {
       mediateurmaitre: {
           mediateurmaitreSoap: {
-              getAnswer: function(args, callback) {
+              getAnswer: function(args, callback,header, req) {
                   // On cherche l'esclave le moins occupé
-				          min = slaves[0]['count'];
-                  index = 0;
+				          var min = slaves[0]['count'];
+                  var index = 0;
 
                   for(i = 1; i < slaves.length; ++i)
                   {
@@ -33,29 +33,33 @@ var myService = {
 
                   ++slaves[index]['count'];
 
+                  // Au cas où la connexion au client est abandonnée (Ctrl+C par exemple)
+                  // On décrémente le compteur
+                  req.on("close", function(err1){
+                    console.log("ABORT CALL TO SLAVE "+ index + " \t#\t " + slaves[index]['url']);
+                    --slaves[index]['count'];
+                  });
+
                   // On appelle l'esclave
                   var args = {};
                   var resultat = '';
                   
-                  console.log("ON APPELLE ESCLAVE : " + index)
-
+                  console.log("CALL TO SLAVE " + index + " \t#\t " + slaves[index]['url']);
+                  
                   soap.createClient(slaves[index]['url']+'?wsdl', function(err, client) {
 
                       client.getAnswer(args, function(err, result) {
                           resultat = result.result;
-
-                          // L'esclave a répondu, on décrémente son compteur
+                          // On décrémente le compteur car l'esclave a répondu
                           --slaves[index]['count'];
-
                           // La reponse de l'esclave est renvoyé à l'utilisateur final
+                          console.log("ANSWER FROM SLAVE " + index + " \t#\t " + slaves[index]['url'] + " #\t Resultat : " + resultat);
                           callback({
                              result : resultat
                           })
                       });
 
-                  });
-
-                  
+                  });                  
               }
           }
       }
@@ -69,7 +73,6 @@ var xml = require('fs').readFileSync('mediateur_maitre.wsdl', 'utf8'),
 
 server.listen(PORT_ECOUTE, "0.0.0.0");
 service = soap.listen(server, '/mediateurmaitre', myService, xml);
-
 // Implémentation de WSSecurity pour nodejs - username/password : root/root
 service.authenticate = function(security) {
   var created, nonce, password, user, token;

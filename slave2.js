@@ -1,7 +1,8 @@
 var fs = require('fs'),
     soap = require('soap'),
     request = require('request'),
-    http = require('http');
+    http = require('http'),
+    stdin = require('yesno');
 
 var PORT_ECOUTE = 8002;
 
@@ -9,9 +10,17 @@ var PORT_ECOUTE = 8002;
 var myService = {
       mediateurslave: {
           mediateurslaveSoap: {
-              getAnswer: function(args) {
-                while(1) {}
-                return {result : "ok"};
+              getAnswer: function(args,callback) {
+                  var resultat;
+                  // Prompt, renvoie YES ou NO.
+                  stdin.ask('ANSWER (y/n) : ', null, function(yes){
+                      resultat = (yes) ? "YES": "NO";
+
+                      // Renvoie la réponse au maitre
+                      callback({
+                        result : resultat
+                      })
+                  });  
               }
           }
       }
